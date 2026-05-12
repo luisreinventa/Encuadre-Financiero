@@ -9,7 +9,7 @@ Group=www-data
 Restart=always
 RestartSec=5
 WorkingDirectory=/var/www/reinventa
-ExecStart=/usr/bin/php artisan queue:work --tries=5 --backoff=30 --max-time=3600 --sleep=3
+ExecStart=/usr/bin/php8.3 artisan queue:work --tries=5 --backoff=30 --max-time=3600 --sleep=3
 
 [Install]
 WantedBy=multi-user.target

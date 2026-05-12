@@ -25,9 +25,10 @@ echo "════════════════════════�
 # ── 0. Pre-flight ─────────────────────────────────────────────────
 [ "$EUID" -ne 0 ] && { echo "✗ Corre como root"; exit 1; }
 [ ! -f "$FRANKY_IP_CONF" ] && { echo "✗ No existe $FRANKY_IP_CONF"; exit 1; }
-command -v php >/dev/null     || { echo "✗ PHP no instalado"; exit 1; }
+command -v php8.3 >/dev/null   || { echo "✗ PHP 8.3 no instalado (apt install php8.3-fpm php8.3-cli ...)"; exit 1; }
 command -v composer >/dev/null || { echo "✗ Composer no instalado"; exit 1; }
 command -v mysql >/dev/null    || { echo "✗ MySQL no instalado"; exit 1; }
+export COMPOSER_ALLOW_SUPERUSER=1
 
 # ── 1. MySQL ──────────────────────────────────────────────────────
 mysql -u root <<SQL
@@ -48,7 +49,7 @@ else
 fi
 
 # ── 3. Composer ───────────────────────────────────────────────────
-composer install --no-dev --optimize-autoloader --no-interaction
+php8.3 /usr/bin/composer install --no-dev --optimize-autoloader --no-interaction
 echo "✅ Dependencias instaladas"
 
 # ── 4. .env ───────────────────────────────────────────────────────
@@ -76,24 +77,24 @@ set_env "DB_PASSWORD" "${DB_PASS}"
 set_env "QUEUE_CONNECTION" "database"
 grep -q "^GHL_WEBHOOK_URL=" .env || echo "GHL_WEBHOOK_URL=" >> .env
 
-php artisan key:generate --force
+php8.3 artisan key:generate --force
 echo "✅ .env configurado y APP_KEY generado"
 
 # ── 5. Migraciones (incluida jobs table para queue:database) ──────
-php artisan queue:table 2>/dev/null || true
-php artisan migrate --force
+php8.3 artisan queue:table 2>/dev/null || true
+php8.3 artisan migrate --force
 echo "✅ Migraciones ejecutadas"
 
 # ── 6. Permisos ───────────────────────────────────────────────────
 chown -R www-data:www-data "$APP_DIR"
 chmod -R 755 "$APP_DIR/storage" "$APP_DIR/bootstrap/cache"
-php artisan storage:link || true
+php8.3 artisan storage:link || true
 echo "✅ Permisos OK"
 
 # ── 7. Cache de producción ────────────────────────────────────────
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+php8.3 artisan config:cache
+php8.3 artisan route:cache
+php8.3 artisan view:cache
 echo "✅ Cache optimizado"
 
 # ── 8. Nginx server interno (127.0.0.1:8082) ──────────────────────
@@ -144,7 +145,7 @@ echo "════════════════════════�
 echo ""
 echo "⚠️  PENDIENTE:"
 echo "  1. Edita ${APP_DIR}/.env y pega GHL_WEBHOOK_URL=..."
-echo "  2. Reaplica cache:  cd ${APP_DIR} && php artisan config:cache"
+echo "  2. Reaplica cache:  cd ${APP_DIR} && php8.3 artisan config:cache"
 echo "  3. (Opcional) Worker queue:database:"
 echo "     systemd unit en deploy/reinventa-worker.service"
 echo ""
