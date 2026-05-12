@@ -17,6 +17,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Path Prefix
+    |--------------------------------------------------------------------------
+    |
+    | When the app is deployed under a subpath (e.g. /reinventa) this value
+    | prefixes all web routes. Leave blank in local/root deployments.
+    | Read via config() (not env()) so it survives `php artisan config:cache`.
+    |
+    */
+
+    'path_prefix' => env('APP_PATH_PREFIX', ''),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |

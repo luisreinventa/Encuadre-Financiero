@@ -102,11 +102,14 @@ cp "$APP_DIR/deploy/nginx-reinventa.conf" /etc/nginx/sites-available/reinventa
 ln -sf /etc/nginx/sites-available/reinventa /etc/nginx/sites-enabled/reinventa
 echo "✅ sites-enabled/reinventa instalado"
 
-# ── 9. Patch franky-ip.conf (idempotente, con backup) ─────────────
+# ── 9. Patch franky-ip.conf (idempotente, con backup en /root) ────
+# IMPORTANTE: el backup va FUERA de sites-enabled/ porque nginx lee todo
+# ahí dentro y un .bak con default_server choca con el original.
+mkdir -p /root/nginx-backups
 if grep -q "Reinventa landing" "$FRANKY_IP_CONF"; then
     echo "ℹ️  Patch ya aplicado en franky-ip.conf, skip"
 else
-    BACKUP="${FRANKY_IP_CONF}.bak.$(date +%Y%m%d%H%M%S)"
+    BACKUP="/root/nginx-backups/$(basename "$FRANKY_IP_CONF").bak.$(date +%Y%m%d%H%M%S)"
     cp "$FRANKY_IP_CONF" "$BACKUP"
     echo "📦 Backup: $BACKUP"
 

@@ -4,7 +4,7 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LeadController;
 use Illuminate\Support\Facades\Route;
 
-$prefix = trim((string) env('APP_PATH_PREFIX', ''), '/');
+$prefix = trim((string) config('app.path_prefix', ''), '/');
 
 Route::prefix($prefix)->group(function () {
     Route::get('/', [LandingController::class, 'show'])->name('landing');
