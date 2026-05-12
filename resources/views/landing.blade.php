@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Recupera activos del fracaso · Bootcamp Reinventa tu fracaso</title>
+<link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
+<link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -17,7 +19,9 @@
   html { scroll-behavior: smooth; }
   body { background: var(--bg); color: var(--text); font-family: 'Sora', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(247,245,240,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-  .nav-logo { font-family: 'Libre Baskerville', serif; font-size: 1rem; color: var(--accent); }
+  .nav-logo { display: flex; align-items: center; }
+  .nav-logo img { height: 36px; width: auto; display: block; }
+  @media(max-width:520px){ .nav-logo img { height: 30px; } }
   .nav-cta { background: var(--accent); color: #fff; border: none; padding: .55rem 1.25rem; font-family: 'Sora', sans-serif; font-size: .82rem; font-weight: 600; cursor: pointer; letter-spacing: .04em; transition: background .2s; }
   .nav-cta:hover { background: var(--accent-light); }
   .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 380px; gap: 4rem; align-items: center; padding: 8rem 2rem 5rem; max-width: 1100px; margin: 0 auto; }
@@ -141,7 +145,7 @@
 <body>
 
 <nav>
-  <div class="nav-logo">Reinventa · Ecosistema</div>
+  <a href="#" class="nav-logo" aria-label="Reinventa"><img src="{{ asset('logo.png') }}" alt="Reinventa"></a>
   <button class="nav-cta" onclick="openModal()">Calcular mis activos</button>
 </nav>
 
